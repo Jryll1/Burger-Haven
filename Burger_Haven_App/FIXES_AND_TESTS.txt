@@ -1,0 +1,28 @@
+BURGER HAVEN FIXED — CHANGES AND TEST REPORT
+
+- Preserved the existing FastAPI backend, SQLite database, menu, images, branding, customer accounts, checkout, payment choices, and order history.
+- Customer storefront navigation no longer shows Staff Dashboard or Analytics. A defensive navigation filter removes stale/injected staff links, and page HTML uses no-cache headers to help prevent old navigation markup from sticking.
+- My Orders / Order History loads automatically when a signed-in customer opens Account. It supports adding/removing order lines; editing quantities, product sizes, add-ons, soft drink brands/sizes; live subtotal and grand-total updates; Save Changes and Cancel; and a refreshable history.
+- The backend checks order ownership, edit eligibility, product availability, quantities/options, authoritative prices, and optimistic concurrency. It uses a transaction, saves an edit audit record, updates the same order, and does not alter payment status.
+- Staff operations and administrator analytics use separate permission checks. Staff-token access does not grant analytics API access when STAFF_TOKEN is configured. Analytics reads actual database values.
+- Removed the manual Calculate Total and Calculate Scenario buttons; displayed totals and scenario calculations update automatically.
+
+- Added real account roles (customer / staff / admin) enforced on the server for the staff dashboard APIs and the analytics API. Existing accounts migrate to customer; shared tokens keep working. Roles are granted only with manage_users.py. The /admin and /analytics pages offer account sign-in; customers get a clear no-access message; staff see an "Edited by customer" badge on edited orders.
+- Fixed: two writes to an order inside the same second could leave updated_at unchanged and slip past the stale-edit check; every order write now produces a strictly newer version stamp.
+- Fixed: a non-ASCII X-Admin-Token header caused a 500 error instead of 401.
+
+VALIDATION
+- Automated tests: the original 22 passed in an earlier build. 10 role / stale-edit / migration tests were added in this revision but have NOT been run, because the build container had no network access to install FastAPI. Install requirements.txt plus pytest and httpx, run `python -m pytest tests -q`, and confirm everything passes before relying on the role feature.
+- Verified in this revision: Python compilation; JavaScript syntax; the new role/guard logic extracted from app.py and unit-tested (21 checks); manage_users.py against a copy of the real database (accounts kept as customers, promotion works, real DB untouched); the staff and analytics sign-in pages in headless Chromium against a mock API (29 checks: staff/admin sign-in, customer and staff refusal, token sign-in, edited badge, lock, automatic scenario recalculation, no horizontal overflow on desktop or phone).
+- NOT verified in this revision: the real FastAPI server end to end with the role changes, the customer Edit Order flow after the role changes, and Windows/launcher behavior.
+- Python compilation: passed.
+- JavaScript syntax checks (app.js, admin.js, analytics.js, navigation.js): passed.
+- Browser-driven interaction testing was attempted, but the build container's Chromium policy blocked local HTTP and file URLs with ERR_BLOCKED_BY_ADMINISTRATOR. Do a click-through check on Windows before using this for live orders.
+- Windows launcher was reviewed but cannot be run on this Linux build host.
+
+IMPORTANT RUN INSTRUCTIONS
+- Stop any old Burger Haven server window with Ctrl+C.
+- Extract this archive and run START_BURGER_HAVEN.bat from the NEW Burger_Haven_Fixed folder, not from the old Burger_Haven_Manual_GCash_Maya or Burger_Haven_Upgraded folder.
+- If port 8000 is already in use, stop the existing server process before launching the new one.
+- ADMIN_TOKEN should be a unique secret for public deployment. Set STAFF_TOKEN separately when staff must not have analytics access. Use HTTPS.
+- GCash/Maya transfers are manually verified; no wallet API has been integrated. Confirm menu prices and drink sizes before accepting real orders.

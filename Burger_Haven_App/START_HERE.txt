@@ -1,0 +1,42 @@
+BURGER HAVEN FIXED — START HERE (WINDOWS)
+
+IMPORTANT: Your screenshot showed the original project version. Stop any running Burger Haven terminal with Ctrl+C before you start this package. Do not launch the old Burger_Haven_Manual_GCash_Maya or Burger_Haven_Upgraded folder.
+
+QUICK START
+1. Extract the complete Burger_Haven_Fixed ZIP to a new folder. Do not run files from inside the ZIP preview.
+2. Double-click START_BURGER_HAVEN.bat in the outer Burger_Haven_Fixed folder. If you are already inside this app folder, use the START_BURGER_HAVEN.bat in this app folder.
+3. Keep the black terminal window open.
+4. Open http://127.0.0.1:8000 in Chrome.
+5. If Staff Dashboard or Analytics still appears in the customer navigation, stop the server, verify that the terminal path mentions Burger_Haven_Fixed\Burger_Haven_App, start this package again, and press Ctrl+F5.
+
+PAGES
+Storefront: http://127.0.0.1:8000
+Staff dashboard: http://127.0.0.1:8000/admin
+Administrator analytics: http://127.0.0.1:8000/analytics
+
+CUSTOMER ORDER EDITING
+Log in to the customer account used when placing the order. Open Account; My Orders / Order History loads automatically. Click Edit Order beside an eligible order, change items/quantities/options, check the live subtotal and grand total, then click Save Changes. Cancel discards unsaved edits. The existing order number is retained.
+
+Only account-linked unpaid orders in Pending Confirmation or Confirmed status can be edited. Guest orders and orders that are preparing, completed, cancelled, paid, or waiting for e-wallet verification are not editable. A message appears for an ineligible order. Edits do not change payment records.
+
+STAFF / ADMIN ACCOUNTS (ROLES)
+Every account has a role: customer (default), staff, or admin. Customers can shop, check out and manage My Orders. Staff can also open the staff dashboard (orders, payments, menu). Admins can do everything staff can plus open /analytics. The server enforces this on every request, so a customer who types /admin or /analytics, or calls the API directly, is refused.
+1. The person registers normally on the storefront. Public registration can never create staff or admin accounts.
+2. On the server, from the Burger_Haven_App folder, run:
+     python manage_users.py list
+     python manage_users.py set-role person@example.com staff
+     python manage_users.py set-role owner@example.com admin
+   (On Windows use the app's virtual environment, for example: .venv\Scripts\python manage_users.py list.) Changes apply on the person's next request; no restart is needed. Use "set-role EMAIL customer" to remove access.
+3. They sign in on /admin (staff or admin) or /analytics (admin only) with their account email and password.
+Existing accounts all stay customers until you promote them. The shared STAFF_TOKEN / ADMIN_TOKEN in .env still work exactly as before, so nothing you already use breaks. Keep tokens private and replace any example token before public hosting.
+Note: the /admin and /analytics pages themselves still load for anyone as a sign-in screen; the data and actions behind them are protected by the server. Activity log entries still say "admin"/"customer" rather than the individual's name.
+
+GCASH / MAYA
+GCash and Maya transfers use manual verification; no payment API is included. Configure the approved receiving account details in .env and read PAYMENT_SETUP.txt. Verify the actual wallet transaction before marking an order paid.
+
+TROUBLESHOOTING
+- If port 8000 is busy, stop the old Burger Haven server window first.
+- If the customer navigation still shows staff/analytics items, the old app is still running. Stop it, start the launcher from this Burger_Haven_Fixed folder, and refresh Chrome using Ctrl+F5.
+- Use Python 3.13. The launcher creates/repairs the .venv and installs the requirements.
+- Opening index.html directly is design preview only; real ordering and order editing require the running FastAPI server.
+- Do not publish .env, the SQLite database, payment details, or private receipt uploads.

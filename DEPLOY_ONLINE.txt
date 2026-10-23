@@ -1,0 +1,32 @@
+BURGER HAVEN — ONLINE DEPLOYMENT QUICK GUIDE
+
+This package uses FastAPI and SQLite. The existing storefront, menu, manual GCash/Maya verification, and Cash on Delivery options are preserved. Analytics is now a database-backed, administrator-only page; it is no longer a PyScript demo.
+
+RECOMMENDED FOR A SCHOOL DEMO: GitHub + Railway + a Railway persistent volume.
+
+1. Create a private GitHub repository where possible.
+2. Upload the contents of Burger_Haven_App to the repository root (so app.py and Dockerfile are at the root). Do not upload .env, the SQLite database, or customer receipt uploads.
+3. Create a Railway project from that repository. Railway can build the included Dockerfile.
+4. Add a persistent volume to the Railway service, mounted at /data.
+5. In Railway Variables, set at least:
+   ADMIN_TOKEN=<your own long random secret>
+   STAFF_TOKEN=<a separate long random secret for operational staff, optional>
+   DATABASE_PATH=/data/burger_haven.db
+   UPLOAD_DIR=/data/uploads
+   GCASH_ACCOUNT_NAME=<your authorized business account name>
+   GCASH_NUMBER=<your authorized business number>
+   GCASH_QR_IMAGE=
+   MAYA_ACCOUNT_NAME=<your authorized business account name>
+   MAYA_NUMBER=<your authorized business number>
+   MAYA_QR_IMAGE=
+   CASH_ENABLED=true
+   CASH_ON_DELIVERY=true
+   CASH_ON_PICKUP=true
+   DELIVERY_FEE_PHP=30
+   MINIMUM_ORDER_PHP=0
+6. Deploy, then test /api/health, the storefront, /admin, and /analytics. Use separate staff and admin tokens where appropriate.
+7. Place test orders and verify order editing, receipt handling, approval/rejection, and COD before sharing the URL.
+
+Do not use the sample local admin token online. Set legitimate e-wallet business account details only if authorized, and verify real transfers in the wallet before marking orders paid. Analytics and order-management endpoints enforce backend access permissions; still use HTTPS and secure secrets at deployment.
+
+Full steps are in Burger_Haven_App/README.md under "Online school-project deployment (Railway + GitHub)". Hosting prices and plans can change; check the provider's current documentation before deploying.

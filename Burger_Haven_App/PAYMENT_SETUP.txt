@@ -1,0 +1,50 @@
+BURGER HAVEN — MANUAL GCASH & MAYA PAYMENT SETUP
+================================================
+
+This project DOES NOT use a payment API, payment gateway, or automatic wallet verification.
+Customers send money directly to your official GCash or Maya account. You check your actual
+wallet transaction and manually approve or reject their payment claim in the staff dashboard.
+Cash on Delivery stays available as before.
+
+LOCAL SETUP (Windows)
+--------------------
+1. Start Burger Haven once using START_BURGER_HAVEN.bat. It creates Burger_Haven_App\.env
+   from .env.example if .env does not exist.
+2. Stop the running server by clicking its terminal and pressing Ctrl+C.
+3. Open Burger_Haven_App\.env in Notepad or VS Code.
+4. Find these settings and fill in your own official receiving account information:
+
+   GCASH_ACCOUNT_NAME=Your official GCash account name
+   GCASH_NUMBER=Your GCash receiving mobile number
+   MAYA_ACCOUNT_NAME=Your official Maya account name
+   MAYA_NUMBER=Your Maya receiving mobile number
+
+   Replace the example text with your real authorized account details. Keep the values on one
+   line. Do not enter any PIN, password, or OTP. Keep the QR variables blank unless you add
+   a merchant QR image in Burger_Haven_App\static\ and use its /static/... path.
+
+5. Save .env and start START_BURGER_HAVEN.bat again.
+6. Open http://127.0.0.1:8000 and place a test order selecting GCash or Maya.
+   The order screen should display the configured account name, number, order reference, and
+   exact total amount. If a wallet is not configured, do not accept payment through it.
+
+CUSTOMER PAYMENT FLOW
+---------------------
+1. The customer places an order and selects GCash or Maya.
+2. Burger Haven displays your configured account name/number and exact amount to send.
+3. The customer sends the money using their own wallet app, then enters the transaction reference.
+   They may also upload a JPG, PNG, or WEBP screenshot up to 5 MB.
+4. The payment status becomes "Awaiting Verification".
+5. In http://127.0.0.1:8000/admin, inspect the order total and claim. Open your actual GCash/Maya
+   account and verify that the exact amount was received from the customer.
+6. Click "Approve verified payment" only after confirming the incoming transaction. If it is not
+   correct or cannot be found, reject the claim with a clear reason.
+7. Cash/Cash on Delivery orders continue through the existing cash-collection flow.
+
+IMPORTANT
+---------
+- A receipt screenshot or reference number alone does not prove money was received.
+- Never mark a transfer paid unless you have checked the actual account transaction.
+- Configure the same four account variables in your hosting provider's Environment/Variables
+  settings when deploying online; do not publish .env or real account details in GitHub.
+- Set a new strong ADMIN_TOKEN before public deployment and use HTTPS.

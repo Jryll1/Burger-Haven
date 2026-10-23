@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101112">
+  <meta name="description" content="Order fresh burgers, sides, and drinks from Burger Haven.">
+  <meta name="application-version" content="2026.10.23-order-edit-nav-fix">
+  <title>Burger Haven — Great Burgers. Better Moments.</title>
+  <link rel="icon" href="static/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/style.css?v=customer-order-editor-20261023">
+  <script src="static/navigation.js?v=customer-nav-fix-20261023" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Burger Haven home"><img src="static/logo.svg" alt=""><span>BURGER <b>HAVEN</b></span></a>
+    <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <nav id="nav" aria-label="Main navigation"><a class="active" href="#home">Home</a><a href="#menu">Menu</a><a href="#calculator">Calculator</a><a href="#video">Video</a><a href="#about">About</a></nav>
+    <button class="button button-small account-nav-button" id="account-button" data-action="account-open">Login / Register</button>
+    <button class="button button-small order-now-button" data-action="open-cart">Order Now <span class="cart-count" id="cart-count">0</span></button>
+  </header>
+
+  <main>
+    <section id="home" class="hero section">
+      <div class="hero-copy"><p class="eyebrow">Welcome to</p><h1>BURGER<br><span>HAVEN</span></h1><h2>Great Burgers. Better Moments.</h2><p>Fresh ingredients, bold flavors, and burgers made with passion. Take a bite and make your day better.</p><div class="hero-actions"><a class="button" href="#menu">Explore Our Menu <span aria-hidden="true">→</span></a><a class="text-link" href="#how-it-works">How ordering works</a></div><div class="trust-row"><span><i>✓</i> Made to order</span><span><i>✓</i> Clear pricing</span><span><i>✓</i> Cash or e-wallet</span></div></div>
+      <div class="hero-art"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=82" alt="Juicy cheeseburger with fresh toppings" fetchpriority="high"></div>
+    </section>
+
+    <section id="menu" class="section menu-section">
+      <div class="section-heading"><p class="eyebrow">Made fresh for you</p><h2>Our Menu</h2><p>Fresh. Juicy. Delicious.</p></div>
+      <div class="menu-toolbar"><div class="search-wrap"><span aria-hidden="true">⌕</span><input id="product-search" type="search" placeholder="Search the menu…" autocomplete="off" aria-label="Search menu"></div><div class="category-tabs" id="category-tabs" aria-label="Filter by category"><button class="category-tab active" data-category="All">All</button><button class="category-tab" data-category="Burgers">Burgers</button><button class="category-tab" data-category="Combos">Combos</button><button class="category-tab" data-category="Sides">Sides</button><button class="category-tab" data-category="Drinks">Drinks</button></div></div>
+      <div id="menu-grid" class="menu-grid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+      <p id="menu-message" class="status-message" role="status"></p>
+    </section>
+
+
+    <section id="calculator" class="section calculator-section">
+      <div class="section-heading"><p class="eyebrow">Customize your meal</p><h2>Order Calculator</h2><p>Build a meal and see your estimated total before adding it to your cart.</p></div>
+      <div class="calculator-layout">
+        <form id="quick-calculator-form" class="calc-panel" onsubmit="return false">
+          <label for="calc-burger">Select Burger</label>
+          <select id="calc-burger" name="calc-burger" aria-label="Select burger"><option>Loading menu…</option></select>
+          <label for="calc-size">Food size</label>
+          <select id="calc-size" name="calc-size" aria-label="Food size"><option value="medium">Medium</option></select>
+          <p class="calc-field-label">Add-ons</p>
+          <label class="calc-check"><input type="checkbox" data-calc-addon="extra-cheese"> <span>Extra cheese</span><strong id="calc-cheese-price">(+₱20)</strong></label>
+          <label class="calc-check"><input type="checkbox" data-calc-addon="bacon"> <span>Bacon</span><strong id="calc-bacon-price">(+₱30)</strong></label>
+          <label class="calc-check"><input type="checkbox" id="calc-fries" data-calc-product="fries"> <span>Fries</span><strong id="calc-fries-price">From ₱35</strong></label>
+          <div class="drink-options" id="calc-fries-options" hidden>
+            <div class="drink-option-field"><label for="calc-fries-size">Fries size</label><select id="calc-fries-size" aria-label="Fries size"><option value="small">Small — ₱35</option><option value="medium" selected>Medium — ₱50</option><option value="large">Large — ₱70</option><option value="xl">XL — ₱90</option></select></div>
+          </div>
+          <label class="calc-check"><input type="checkbox" id="calc-drink" data-calc-product="drink"> <span>Soft drink</span><strong id="calc-drink-price">From ₱25</strong></label>
+          <div class="drink-options" id="calc-drink-options" hidden>
+            <div class="drink-option-field"><label for="calc-drink-brand">Brand</label><select id="calc-drink-brand" aria-label="Soft drink brand"><option>Sprint</option><option>Sprite</option><option>Royal</option><option>Coke</option><option>Pepsi</option></select></div>
+            <div class="drink-option-field"><label for="calc-drink-size">Size</label><select id="calc-drink-size" aria-label="Soft drink size"><option value="small">Small (250 ml) — ₱25</option><option value="regular" selected>Regular (330 ml) — ₱35</option><option value="large">Large (500 ml) — ₱50</option></select></div>
+          </div>
+          <div class="calc-quantity-block"><label for="calc-quantity">Quantity</label><div class="quantity-row"><button type="button" id="calc-minus" class="quantity-button" data-action="calc-quantity-down" aria-label="Decrease quantity">−</button><input id="calc-quantity" type="number" min="1" max="20" value="1" inputmode="numeric"><button type="button" id="calc-plus" class="quantity-button" data-action="calc-quantity-up" aria-label="Increase quantity">+</button></div></div>
+          <button type="button" id="add-calculator-to-cart" class="button button-outline full">Add Selected Meal to Cart</button>
+          <p id="calculator-message" class="form-message" role="status" aria-live="polite">Choose a burger to get started.</p>
+        </form>
+        <aside class="calc-panel calc-summary-panel" aria-live="polite">
+          <h3>Order Summary</h3>
+          <p><span>Burger</span><strong id="calc-summary-burger">Classic Burger</strong></p>
+          <p><span>Add-ons</span><strong id="calc-summary-addons">None</strong></p>
+          <p><span>Quantity</span><strong id="calc-summary-quantity">×1</strong></p>
+          <div class="calc-summary-divider"></div>
+          <p class="calc-total-row"><span>Total Price</span><strong id="calc-total">₱120</strong></p>
+          <div class="calc-summary-note"><span class="calc-outline-burger" aria-hidden="true">☰</span><p>This is an estimate based on the current menu. The server recalculates all prices during checkout.</p></div>
+        </aside>
+      </div>
+    </section>
+
+
+
+    <section id="about" class="section about-section"><div class="about-copy"><p class="eyebrow">Our story</p><h2>About Burger Haven</h2><p>Burger Haven is built around one simple idea: good food brings people together. We serve satisfying burgers and comfort-food favorites with fresh ingredients, flavorful sauces, and care in every bite.</p><p>Whether you're catching up with friends, sharing a meal with family, or grabbing a quick bite, there's always a place for you here.</p><div class="values"><div><span>✦</span><b>Fresh flavor</b></div><div><span>♡</span><b>Good moments</b></div><div><span>♧</span><b>Customer first</b></div></div></div><div class="brand-panel"><img src="static/logo.svg" alt="Burger Haven burger icon"><h3 class="brand-panel-wordmark">BURGER<br><span>HAVEN</span></h3><p>“Burgers Bring People Together”</p></div></section>
+
+    <section id="video" class="section video-section">
+      <div class="section-heading"><p class="eyebrow">A little taste of happiness</p><h2>Our Story in Every Bite</h2><p>Watch the Burger Haven promotional video and discover what makes every bite special.</p></div>
+      <div class="promo-player" id="promo-player">
+        <video id="promo-video" controls playsinline preload="none" poster="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&amp;fit=crop&amp;w=1600&amp;q=85" aria-label="Burger Haven promotional video"></video>
+        <div class="promo-overlay" id="promo-overlay"><button type="button" class="promo-play-button" id="play-promo" aria-label="Play Burger Haven promotional video">▶</button><h3>Fresh off the grill. Made for your moments.</h3><p>Great Burgers. Better Moments.</p></div>
+      </div>
+      <p id="promo-video-message" class="small-note promo-video-message">To add your group's promo, place an MP4 named <code>burger-haven-promo.mp4</code> in the <code>static</code> folder. The player will use that video when available.</p>
+    </section>
+
+    <section id="how-it-works" class="section steps-section"><div class="section-heading"><p class="eyebrow">Simple and easy</p><h2>How to Order</h2></div><div class="steps-grid"><article class="step-card"><span>01</span><h3>Choose your food</h3><p>Browse the menu, choose your favorites, and customize available extras.</p></article><article class="step-card"><span>02</span><h3>Confirm your details</h3><p>Select delivery or pickup, provide a contact number, and review the total.</p></article><article class="step-card"><span>03</span><h3>Pay your way</h3><p>Choose cash, GCash, or Maya. E-wallet transfers are manually verified by staff.</p></article><article class="step-card"><span>04</span><h3>Track your order</h3><p>Keep your order number and private access code to check order progress.</p></article></div></section>
+
+    <section id="track" class="section track-section"><div class="track-copy"><p class="eyebrow">Stay in the loop</p><h2>Track Your Order</h2><p>Enter your order number and private access code from the confirmation screen. Keep the access code private.</p></div><form id="track-form" class="track-form"><label for="track-order-id">Order number</label><input id="track-order-id" placeholder="BH-YYYYMMDD-ABC123" required maxlength="24" autocomplete="off"><label for="track-token">Private access code</label><input id="track-token" required minlength="24" maxlength="200" placeholder="Paste your order access code" autocomplete="off"><button class="button full" type="submit">Find My Order</button><p id="track-message" class="form-message" role="status"></p></form></section>
+  </main>
+
+  <footer><a class="brand footer-brand" href="#home"><img src="static/logo.svg" alt=""><span>BURGER <b>HAVEN</b></span></a><p>Great Burgers. Better Moments.</p><p>© <span id="year"></span> Burger Haven · Student project / business app template</p><p class="footer-links"><a href="#how-it-works">How to Order</a><span>·</span><a href="#track">Track Order</a><span>·</span></p></footer>
+
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true"><div class="drawer-heading"><div><p class="eyebrow">Your selection</p><h2 id="cart-title">Shopping Cart</h2></div><button class="icon-btn" data-action="close-cart" aria-label="Close cart">✕</button></div><div id="cart-items" class="cart-items"><p class="empty-state">Your cart is empty. Add something delicious from the menu.</p></div><div class="cart-footer"><div class="cart-subtotal"><span>Estimated subtotal</span><strong id="cart-subtotal">₱0</strong></div><p class="small-note">Delivery fee and final total are confirmed by the server at checkout.</p><button class="button full" id="proceed-checkout">Continue to Checkout</button></div></aside>
+
+  <section class="modal auth-modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" hidden>
+    <div class="modal-card auth-card">
+      <div class="auth-topline"><button type="button" class="auth-back" data-action="auth-back" aria-label="Back">‹</button><button type="button" class="icon-btn" data-action="auth-close" aria-label="Close account dialog">✕</button></div>
+      <div class="auth-brand"><img src="static/logo.svg" alt="Burger Haven"><span>BURGER <b>HAVEN</b></span></div>
+      <p class="eyebrow auth-eyebrow" id="auth-step-label">Your account</p><h2 id="auth-title">Email</h2>
+      <p class="auth-subtitle" id="auth-subtitle">We'll check if you already have an account.</p>
+      <form id="auth-form" class="auth-form">
+        <div id="auth-register-fields" hidden>
+          <label for="auth-name">Full name *</label><input id="auth-name" name="full_name" autocomplete="name" minlength="2" maxlength="100" placeholder="Full name">
+          <label for="auth-phone">Mobile number *</label><input id="auth-phone" name="phone" autocomplete="tel" maxlength="25" placeholder="09XX XXX XXXX">
+          <label class="auth-terms-label"><input id="auth-terms" type="checkbox" name="accept_terms" required> I accept the terms and privacy policy.</label>
+        </div>
+        <label for="auth-email">Email Address *</label><input id="auth-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="Email Address">
+        <label for="auth-password">Password *</label><div class="auth-password-wrap"><input id="auth-password" name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="Password"><button type="button" id="toggle-auth-password" class="password-toggle" aria-label="Show password">Show</button></div>
+        <div id="auth-confirm-wrap" hidden><label for="auth-confirm-password">Confirm password *</label><input id="auth-confirm-password" name="confirm_password" type="password" autocomplete="new-password" maxlength="128" placeholder="Confirm password"></div>
+        <div id="auth-feedback" class="form-message" role="status" aria-live="polite"></div>
+        <button id="auth-submit" type="submit" class="button full auth-primary">Continue</button>
+      </form>
+      <button id="auth-mode-toggle" type="button" class="auth-mode-toggle" data-action="auth-toggle-mode">New to Burger Haven? Create an account</button>
+      <button type="button" class="auth-guest" data-action="guest-continue">Continue as Guest</button>
+      <div id="auth-account-panel" hidden><div class="auth-user-summary" id="auth-user-summary"></div><div class="customer-order-history-heading"><h3>My Orders / Order History</h3><p>View your orders and edit eligible unpaid orders before preparation starts.</p></div><button id="load-my-orders" type="button" class="button button-outline full" data-action="load-my-orders">Refresh My Orders</button><div id="auth-order-history" class="auth-order-history" aria-live="polite"><p class="small-note">Your orders will appear here.</p></div><button type="button" class="button full" data-action="auth-logout">Log Out</button></div>
+      <p class="auth-legal">Your account information is used to support orders and order history. Never share e-wallet PINs, passwords, or OTPs with anyone.</p>
+    </div>
+  </section>
+
+  <section class="modal" id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" hidden><div class="modal-card"><div class="modal-heading"><div><p class="eyebrow">Almost there</p><h2 id="checkout-title">Checkout</h2></div><button class="icon-btn" data-action="close-checkout" aria-label="Close checkout">✕</button></div><form id="checkout-form"><div class="form-grid"><div class="field full-field"><label for="customer-name">Full name *</label><input id="customer-name" name="customer_name" required minlength="2" maxlength="100" autocomplete="name"></div><div class="field full-field"><label for="customer-phone">Contact number *</label><input id="customer-phone" name="phone" required minlength="7" maxlength="25" autocomplete="tel" placeholder="09XX XXX XXXX"></div><div class="field"><label for="fulfillment">Order type *</label><select id="fulfillment" name="fulfillment_type" required><option value="delivery">Delivery</option><option value="pickup">Pickup</option></select></div><div class="field"><label for="payment-method">Payment method *</label><select id="payment-method" name="payment_method" required><option value="cash">Cash</option><option value="gcash">GCash (manual verification)</option><option value="maya">Maya (manual verification)</option></select></div><div class="field full-field" id="address-field"><label for="address">Delivery address *</label><textarea id="address" name="address" rows="2" minlength="8" maxlength="400" placeholder="House number, street, barangay, city"></textarea></div><div class="field full-field"><label for="order-notes">Order notes (optional)</label><textarea id="order-notes" name="notes" rows="2" maxlength="500" placeholder="Landmark or special instructions"></textarea></div></div><div class="checkout-summary"><div><span>Items subtotal</span><strong id="checkout-subtotal">₱0</strong></div><div><span>Delivery fee</span><strong id="checkout-delivery">₱0</strong></div><div class="summary-total"><span>Estimated total</span><strong id="checkout-total">₱0</strong></div><p class="small-note">The server calculates and confirms the final total when the order is placed.</p></div><div id="checkout-error" class="error-box" role="alert" hidden></div><div class="modal-actions"><button type="button" class="button button-outline" data-action="close-checkout">Back</button><button id="place-order" type="submit" class="button">Place Order</button></div><p class="form-legal">By placing the order, you agree to provide accurate contact and delivery details.</p></form></div></section>
+
+  <section class="modal" id="order-modal" role="dialog" aria-modal="true" aria-labelledby="order-modal-title" hidden><div class="modal-card order-modal-card"><div class="modal-heading"><div><p class="eyebrow">Order received</p><h2 id="order-modal-title">Your Order</h2></div><button class="icon-btn" data-action="close-order" aria-label="Close order details">✕</button></div><div id="order-details"></div></div></section>
+
+
+  <section class="modal" id="customize-modal" role="dialog" aria-modal="true" aria-labelledby="customize-title" hidden><div class="modal-card"><div class="modal-heading"><div><p class="eyebrow">Make it yours</p><h2 id="customize-title">Customize Item</h2></div><button class="icon-btn" data-action="close-customize" aria-label="Close customization">✕</button></div><div id="customize-content"></div></div></section>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="static/app.js?v=customer-order-editor-20261023" defer></script>
+</body>
+</html>
